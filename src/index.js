@@ -50,7 +50,7 @@ function replace (location, complete: ?Function, fail: ?Function, success: ?Func
 }
 
 function go (delta) {
-  wx.navigateBack({ delta })
+  wx.navigateBack({ delta * -1 })
 }
 
 function back () {

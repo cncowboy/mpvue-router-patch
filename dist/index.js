@@ -89,7 +89,7 @@ function replace(location, complete, fail, success) {
 }
 
 function go(delta) {
-  wx.navigateBack({ delta });
+  wx.navigateBack({ delta * -1 });
 }
 
 function back() {
