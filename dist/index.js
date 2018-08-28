@@ -132,7 +132,8 @@ var index = {
     const $route = {
       get() {
         return _route;
-      }
+      },
+      set (v) { _route = v; }
     };
 
     Object.defineProperty(Vue.prototype, '$router', $router);
