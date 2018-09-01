@@ -1,16 +1,3 @@
-// const encodeReserveRE = /[!'()*]/g
-// const encodeReserveReplacer = c => '%' + c.charCodeAt(0).toString(16)
-// const commaRE = /%2C/g
-
-// fixed encodeURIComponent which is more conformant to RFC3986:
-// - escapes [!'()*]
-// - preserve commas
-// const encode = str => encodeURIComponent(str)
-//   .replace(encodeReserveRE, encodeReserveReplacer)
-//   .replace(commaRE, ',')
-
-const encode = str => str;
-
 function stringifyQuery(obj) {
   const res = obj ? Object.keys(obj).map(key => {
     const val = obj[key];
@@ -20,7 +7,7 @@ function stringifyQuery(obj) {
     }
 
     if (val === null) {
-      return encode(key);
+      return key;
     }
 
     if (Array.isArray(val)) {
@@ -30,15 +17,15 @@ function stringifyQuery(obj) {
           return;
         }
         if (val2 === null) {
-          result.push(encode(key));
+          result.push(key);
         } else {
-          result.push(encode(key) + '=' + encode(val2));
+          result.push(`${key}=${val2}`);
         }
       });
       return result.join('&');
     }
 
-    return encode(key) + '=' + encode(val);
+    return `${key}=${val}`;
   }).filter(x => x.length > 0).join('&') : null;
   return res ? `?${res}` : '';
 }
@@ -83,22 +70,22 @@ function push(location, complete, fail, success) {
   wx.navigateTo(params);
 }
 
-function replace (location, complete: ?Function, fail: ?Function, success: ?Function) {
-  const url = parseUrl(location)
-  const params = { url, complete, fail, success }
+function replace(location, complete, fail, success) {
+  const url = parseUrl(location);
+  const params = { url, complete, fail, success };
   if (location.isTab) {
-    wx.switchTab(params)
-    return
+    wx.switchTab(params);
+    return;
   }
   if (location.reLaunch) {
-    wx.reLaunch(params)
-    return
+    wx.reLaunch(params);
+    return;
   }
-  wx.redirectTo(params)
+  wx.redirectTo(params);
 }
 
 function go(delta) {
-  wx.navigateBack({ delta: delta * -1 })
+  wx.navigateBack({ delta: delta * -1 });
 }
 
 function back() {
@@ -142,7 +129,9 @@ var index = {
       get() {
         return _route;
       },
-      set (v) { _route = v; }
+      set(v) {
+        _route = v;
+      }
     };
 
     Object.defineProperty(Vue.prototype, '$router', $router);
